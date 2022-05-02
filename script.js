@@ -1,14 +1,26 @@
 const gameBoard = (() => {
-    let boardValues = ['X', 'X', 'X', 'O', 'O', 'O', 'X', 'X', 'X'];
+    let boardValues = ['', '', '', '', '', '', '', '', ''];
     const boardGrid = document.querySelector('.game-board');
-    console.log(boardValues);
 
-    for (cell of boardValues) {
-        let cellDiv = document.createElement('div');
-        cellDiv.classList.toggle('board-cell');
-        cellDiv.textContent =  cell;
-        boardGrid.appendChild(cellDiv);
+    function generateBoard () {
+        for (cell of boardValues) {
+            let cellDiv = document.createElement('div');
+            cellDiv.classList.toggle('board-cell');
+            cellDiv.textContent =  cell;
+            boardGrid.appendChild(cellDiv);
+        }
     }
+
+    function clearBoard () {
+        for (cell of boardValues) {
+            cell = '';
+        }
+        boardGrid.innerHTML = '';
+        this.generateBoard();
+    }
+
+
+    return {generateBoard, clearBoard};
 })();
 
 
@@ -16,23 +28,21 @@ const gameBoard = (() => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const Player = (name, number) => {
-    return {name, number};
+const Player = (name, symbol) => {
+    function placeSymbol() {
+        let cells = document.querySelectorAll('.board-cell');
+        cells.forEach(cell => cell.addEventListener ('click', () => {
+            if (cell.textContent == '') {
+                cell.textContent = this.symbol;
+            }
+        }));
+    }
+    return {name, symbol, placeSymbol};
 }
 
-const player1 = Player('stephen', 'one');
+
+
+
+gameBoard.generateBoard();
+const player1 = Player('Stephen', 'X');
+player1.placeSymbol();
