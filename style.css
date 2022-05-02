@@ -1,0 +1,29 @@
+* {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    background-color: gray;
+    border: 1px solid black;
+}
+
+body {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    padding: 48px;
+    justify-items: center;
+    align-items: center;
+    background-color: antiquewhite;
+}
+
+.board-cell {
+    background-color: antiquewhite;
+    font-size: 2rem;
+}
