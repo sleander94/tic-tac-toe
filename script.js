@@ -2,11 +2,15 @@ const Player = (name, symbol) => {
     return {name, symbol};
 }
 
+const playerX = Player('Player 1', 'X');
+const playerO = Player('Player 2', 'O');
 
-const gameBoard = (() => {
+
+const gameGrid = (() => {
     let boardValues = ['', '', '', '', '', '', '', '', ''];
     const boardGrid = document.querySelector('.game-board');
     generateBoard();
+    displayPlayers();
 
 
     function generateBoard() {
@@ -23,17 +27,39 @@ const gameBoard = (() => {
         generateBoard();
     }
 
+    function displayPlayers() {
+        const players = document.querySelector('.players');
+
+        const player1 = document.createElement('div')
+        const player1Name = document.createElement('div');
+        player1Name.classList.toggle('name');
+        const player1Symbol = document.createElement('div');
+        player1Symbol.classList.toggle('symbol');
+        player1Name.textContent = playerX.name;
+        player1Symbol.textContent = playerX.symbol;
+        player1.appendChild(player1Name);
+        player1.appendChild(player1Symbol);
+        players.appendChild(player1);
+
+        const player2 = document.createElement('div')
+        const player2Name = document.createElement('div');
+        player2Name.classList.toggle('name');
+        const player2Symbol = document.createElement('div');
+        player2Symbol.classList.toggle('symbol');
+        player2Name.textContent = playerO.name;
+        player2Symbol.textContent = playerO.symbol;
+        player2.appendChild(player2Name);
+        player2.appendChild(player2Symbol);
+        players.appendChild(player2);
+    }
+
     return {generateBoard, clearBoard}
 })();
 
 
-const playerX = Player('Stephen', 'X');
-const playerO = Player('Hannah', 'O');
-
-
 const game = (() => {
     let cells = document.querySelectorAll('.board-cell');
-    let controls = document.querySelector('.controls');
+    let postGame = document.querySelector('.post-game');
     let turnTracker = 1;
     let currentPlayer = playerX;
     let winner = false;
@@ -104,9 +130,9 @@ const game = (() => {
 
 
     function displayWinner() {
-        let winMessage = document.createElement('p');
+        let winMessage = document.createElement('div');
         winMessage.classList.toggle('win-message');
-        controls.appendChild(winMessage);
+        postGame.appendChild(winMessage);
         if (checkForWinner() == playerX.symbol) {
             winMessage.textContent = `${playerX.name} is the winner!`;
         } else if (checkForWinner() == playerO.symbol) {
@@ -117,19 +143,18 @@ const game = (() => {
     }
     
 
-
     function createRestartButton() {
         let restartButton = document.createElement('button');
             restartButton.type = 'button';
             restartButton.classList.toggle('restart');
             restartButton.textContent = 'Play Again?';
-            controls.appendChild(restartButton);
+            postGame.appendChild(restartButton);
             restartButton.addEventListener('click', () => {
-                gameBoard.clearBoard();
+                gameGrid.clearBoard();
                 cells = document.querySelectorAll('.board-cell');
                 winner = false;
                 playGame();
-                controls.removeChild(restartButton);
+                postGame.innerHTML = '';
         });
     }
 
