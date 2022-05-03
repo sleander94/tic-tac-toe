@@ -8,6 +8,7 @@ const gameBoard = (() => {
     const boardGrid = document.querySelector('.game-board');
     generateBoard();
 
+
     function generateBoard() {
         for (cell of boardValues) {
             let cellDiv = document.createElement('div');
@@ -18,29 +19,55 @@ const gameBoard = (() => {
     }
 
     function clearBoard() {
-        for (cell of boardValues) {
-            cell = '';
-        }
         boardGrid.innerHTML = '';
-        this.generateBoard();
+        generateBoard();
     }
 
     return {generateBoard, clearBoard}
 })();
 
 
-const player1 = Player('Stephen', 'X');
-const player2 = Player('Hannah', 'O');
+const playerX = Player('Stephen', 'X');
+const playerO = Player('Hannah', 'O');
 
 
 const game = (() => {
     let cells = document.querySelectorAll('.board-cell');
+    let controls = document.querySelector('.controls');
     let turnTracker = 1;
-    let currentPlayer = player1;
-    startTurns(currentPlayer);
+    let currentPlayer = playerX;
+    let winner = false;
+    playGame();
 
 
-    function checkOutcome() {
+    function playGame() {
+        cells.forEach(cell => cell.addEventListener ('click', calculateTurn));
+        if (winner) {
+            cells.forEach(cell => cell.removeEventListener ('click', calculateTurn));
+            displayWinner();
+            createRestartButton();
+        }
+    }
+
+
+    function calculateTurn() {
+        if (turnTracker > 0) {
+            currentPlayer = playerX;
+        } else {
+            currentPlayer = playerO;
+        }
+        if (this.textContent == '') {
+            this.textContent = currentPlayer.symbol; 
+            turnTracker *= -1;
+            if (checkForWinner()) {
+                winner = true;
+                playGame();
+            } 
+        }
+    }
+
+
+    function checkForWinner() {
         let cellsArray = Array.from(cells);
         let cellsList = [];
         cellsArray.forEach(cell => cellsList.push(cell.textContent));
@@ -76,29 +103,34 @@ const game = (() => {
     }
 
 
-    function startTurns(player) {
-        cells.forEach(cell => cell.addEventListener ('click', () => {
-            if (turnTracker > 0) {
-                currentPlayer = player1;
-            } else {
-                currentPlayer = player2;
-            }
-            if (cell.textContent == '') {
-                cell.textContent = currentPlayer.symbol; 
-                turnTracker *= -1;
-                if (checkOutcome()) {
-                    if (checkOutcome() == player1.symbol) {
-                        console.log(`${player1.name} is the winner!`);
-                    } else if (checkOutcome() == player2.symbol) {
-                        console.log(`${player2.name} is the winner!`);
-                    } else {
-                        console.log(`It's a tie!`);
-                    }
-                
-                } else {
-                     startTurns(currentPlayer);
-                }
-            }
-        }));
+    function displayWinner() {
+        let winMessage = document.createElement('p');
+        winMessage.classList.toggle('win-message');
+        controls.appendChild(winMessage);
+        if (checkForWinner() == playerX.symbol) {
+            winMessage.textContent = `${playerX.name} is the winner!`;
+        } else if (checkForWinner() == playerO.symbol) {
+            winMessage.textContent = `${playerO.name} is the winner!`;
+        } else {
+            winMessage.textContent = `It's a tie!`;
+        }
     }
+    
+
+
+    function createRestartButton() {
+        let restartButton = document.createElement('button');
+            restartButton.type = 'button';
+            restartButton.classList.toggle('restart');
+            restartButton.textContent = 'Play Again?';
+            controls.appendChild(restartButton);
+            restartButton.addEventListener('click', () => {
+                gameBoard.clearBoard();
+                cells = document.querySelectorAll('.board-cell');
+                winner = false;
+                playGame();
+                controls.removeChild(restartButton);
+        });
+    }
+
 })();
