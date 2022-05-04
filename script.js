@@ -68,6 +68,7 @@ const gameDisplay = (() => {
             let nameDiv = player1Div.querySelector('.name');
             let newName = prompt('Enter your name:', `${nameDiv.textContent}`);
             nameDiv.textContent = newName;
+            playerX.name = newName;
         });
             
         const player2Div = document.querySelector('.player2')
@@ -77,9 +78,10 @@ const gameDisplay = (() => {
         renameButton2.textContent = 'Edit Name';
         player2Div.appendChild(renameButton2);
         renameButton2.addEventListener('click', () => {
-            let nameDiv = player1Div.querySelector('.name');
+            let nameDiv = player2Div.querySelector('.name');
             let newName = prompt('Enter your name:', `${nameDiv.textContent}`);
-            nameDiv.textContent = newName;   
+            nameDiv.textContent = newName; 
+            playerO.name = newName;  
         });
         
     }
