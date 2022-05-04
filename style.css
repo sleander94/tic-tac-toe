@@ -13,6 +13,38 @@ body {
     align-items: center;
 }
 
+
+.players {
+    display: flex;
+    width: 90vw;
+    justify-content: space-between;
+}
+
+.players .player1, .players .player2  {
+    display: grid;
+    grid: 2fr 1fr / 1fr 1fr;
+    gap: 8px;
+    padding: 8px;
+}
+
+.player2 {
+    text-align: right;
+}
+
+.player2 .name, .player2 button {
+    grid-column: 2 / 3;
+}
+
+.player2 .symbol {
+    grid-row: 1 / 2;
+}
+
+
+
+
+
+
+
 .game-board {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -24,6 +56,9 @@ body {
 }
 
 .board-cell {
+    width: 40px;
+    height: 40px;
     background-color: antiquewhite;
+    text-align: center;
     font-size: 2rem;
 }
