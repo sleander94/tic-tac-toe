@@ -6,11 +6,10 @@ const playerX = Player('Player 1', 'X');
 const playerO = Player('Player 2', 'O');
 
 
-const gameGrid = (() => {
+const gameDisplay = (() => {
     let boardValues = ['', '', '', '', '', '', '', '', ''];
     const boardGrid = document.querySelector('.game-board');
-    generateBoard();
-    displayPlayers();
+    const postGame = document.querySelector('.post-game');
 
 
     function generateBoard() {
@@ -22,10 +21,12 @@ const gameGrid = (() => {
         }
     }
 
+
     function clearBoard() {
         boardGrid.innerHTML = '';
         generateBoard();
     }
+
 
     function displayPlayers() {
         const players = document.querySelector('.players');
@@ -53,25 +54,56 @@ const gameGrid = (() => {
         players.appendChild(player2);
     }
 
-    return {generateBoard, clearBoard}
+
+    function displayWinner() {
+        let winMessage = document.createElement('div');
+        winMessage.classList.toggle('win-message');
+        postGame.appendChild(winMessage);
+        if (game.checkForWinner() == playerX.symbol) {
+            winMessage.textContent = `${playerX.name} is the winner!`;
+        } else if (game.checkForWinner() == playerO.symbol) {
+            winMessage.textContent = `${playerO.name} is the winner!`;
+        } else {
+            winMessage.textContent = `It's a tie!`;
+        }
+    }
+
+
+    function createRestartButton() {
+        let restartButton = document.createElement('button');
+            restartButton.type = 'button';
+            restartButton.classList.toggle('restart');
+            restartButton.textContent = 'Play Again?';
+            postGame.appendChild(restartButton);
+            restartButton.addEventListener('click', () => {
+                gameDisplay.clearBoard();
+                cells = document.querySelectorAll('.board-cell');
+                game.playGame();
+                postGame.innerHTML = '';
+        });
+    }
+
+    generateBoard();
+    displayPlayers();
+    return {generateBoard, clearBoard, displayWinner, createRestartButton}
 })();
 
 
 const game = (() => {
-    let cells = document.querySelectorAll('.board-cell');
-    let postGame = document.querySelector('.post-game');
-    let turnTracker = 1;
     let currentPlayer = playerX;
+    let turnTracker = 1;
     let winner = false;
-    playGame();
 
 
     function playGame() {
+        let cells = document.querySelectorAll('.board-cell');
         cells.forEach(cell => cell.addEventListener ('click', calculateTurn));
         if (winner) {
             cells.forEach(cell => cell.removeEventListener ('click', calculateTurn));
-            displayWinner();
-            createRestartButton();
+            turnTracker = 1;
+            winner = false;
+            gameDisplay.displayWinner();
+            gameDisplay.createRestartButton();
         }
     }
 
@@ -94,6 +126,7 @@ const game = (() => {
 
 
     function checkForWinner() {
+        let cells = document.querySelectorAll('.board-cell');
         let cellsArray = Array.from(cells);
         let cellsList = [];
         cellsArray.forEach(cell => cellsList.push(cell.textContent));
@@ -129,33 +162,6 @@ const game = (() => {
     }
 
 
-    function displayWinner() {
-        let winMessage = document.createElement('div');
-        winMessage.classList.toggle('win-message');
-        postGame.appendChild(winMessage);
-        if (checkForWinner() == playerX.symbol) {
-            winMessage.textContent = `${playerX.name} is the winner!`;
-        } else if (checkForWinner() == playerO.symbol) {
-            winMessage.textContent = `${playerO.name} is the winner!`;
-        } else {
-            winMessage.textContent = `It's a tie!`;
-        }
-    }
-    
-
-    function createRestartButton() {
-        let restartButton = document.createElement('button');
-            restartButton.type = 'button';
-            restartButton.classList.toggle('restart');
-            restartButton.textContent = 'Play Again?';
-            postGame.appendChild(restartButton);
-            restartButton.addEventListener('click', () => {
-                gameGrid.clearBoard();
-                cells = document.querySelectorAll('.board-cell');
-                winner = false;
-                playGame();
-                postGame.innerHTML = '';
-        });
-    }
-
+    playGame();
+    return {playGame, checkForWinner}
 })();
