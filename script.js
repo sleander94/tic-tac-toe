@@ -4,6 +4,7 @@ const Player = (name, symbol) => {
 
 const playerX = Player('Player 1', 'X');
 const playerO = Player('Player 2', 'O');
+let turnTracker = 1;
 
 
 const gameDisplay = (() => {
@@ -102,16 +103,17 @@ const gameDisplay = (() => {
 
 
     function createRestartButton() {
+        postGame.innerHTML = '';
         const restartButton = document.createElement('button');
             restartButton.type = 'button';
             restartButton.classList.toggle('restart');
-            restartButton.textContent = 'Play Again?';
+            restartButton.textContent = 'Reset';
             postGame.appendChild(restartButton);
             restartButton.addEventListener('click', () => {
                 gameDisplay.clearBoard();
                 cells = document.querySelectorAll('.board-cell');
                 game.playGame();
-                postGame.innerHTML = '';
+                turnTracker = 1;
         });
     }
 
@@ -124,19 +126,17 @@ const gameDisplay = (() => {
 
 const game = (() => {
     let currentPlayer = playerX;
-    let turnTracker = 1;
     let winner = false;
 
 
     function playGame() {
+        gameDisplay.createRestartButton();
         let cells = document.querySelectorAll('.board-cell');
         cells.forEach(cell => cell.addEventListener ('click', calculateTurn));
         if (winner) {
             cells.forEach(cell => cell.removeEventListener ('click', calculateTurn));
-            turnTracker = 1;
             winner = false;
             gameDisplay.displayWinner();
-            gameDisplay.createRestartButton();
         }
     }
 
