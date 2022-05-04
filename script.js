@@ -11,6 +11,8 @@ const gameDisplay = (() => {
     let boardValues = ['', '', '', '', '', '', '', '', ''];
     const boardGrid = document.querySelector('.game-board');
     const postGame = document.querySelector('.post-game');
+    const players = document.querySelector('.players');
+    const winMessageContainer = document.createElement('div');
 
 
     function generateBoard() {
@@ -30,8 +32,6 @@ const gameDisplay = (() => {
 
 
     function displayPlayers() {
-        const players = document.querySelector('.players');
-
         const player1 = document.createElement('div');
         player1.classList.toggle('player1');
         const player1Name = document.createElement('div');
@@ -91,7 +91,8 @@ const gameDisplay = (() => {
     function displayWinner() {
         const winMessage = document.createElement('div');
         winMessage.classList.toggle('win-message');
-        postGame.appendChild(winMessage);
+        winMessageContainer.appendChild(winMessage)
+        players.insertBefore(winMessageContainer, players.lastElementChild);
         if (game.checkForWinner() == playerX.symbol) {
             winMessage.textContent = `${playerX.name} is the winner!`;
         } else if (game.checkForWinner() == playerO.symbol) {
@@ -104,6 +105,7 @@ const gameDisplay = (() => {
 
     function createRestartButton() {
         postGame.innerHTML = '';
+        winMessageContainer.innerHTML = '';
         const restartButton = document.createElement('button');
             restartButton.type = 'button';
             restartButton.classList.toggle('restart');
