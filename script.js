@@ -31,7 +31,8 @@ const gameDisplay = (() => {
     function displayPlayers() {
         const players = document.querySelector('.players');
 
-        const player1 = document.createElement('div')
+        const player1 = document.createElement('div');
+        player1.classList.toggle('player1');
         const player1Name = document.createElement('div');
         player1Name.classList.toggle('name');
         const player1Symbol = document.createElement('div');
@@ -43,6 +44,7 @@ const gameDisplay = (() => {
         players.appendChild(player1);
 
         const player2 = document.createElement('div')
+        player2.classList.toggle('player2');
         const player2Name = document.createElement('div');
         player2Name.classList.toggle('name');
         const player2Symbol = document.createElement('div');
@@ -55,8 +57,36 @@ const gameDisplay = (() => {
     }
 
 
+    function createRenameButtons() {
+        const player1Div = document.querySelector('.player1')
+        const renameButton1 = document.createElement('button');
+        renameButton1.type = 'button';
+        renameButton1.classList.toggle('rename');
+        renameButton1.textContent = 'Edit Name';
+        player1Div.appendChild(renameButton1);
+        renameButton1.addEventListener('click', () => {
+            let nameDiv = player1Div.querySelector('.name');
+            let newName = prompt('Enter your name:', `${nameDiv.textContent}`);
+            nameDiv.textContent = newName;
+        });
+            
+        const player2Div = document.querySelector('.player2')
+        const renameButton2 = document.createElement('button');
+        renameButton2.type = 'button';
+        renameButton2.classList.toggle('rename');
+        renameButton2.textContent = 'Edit Name';
+        player2Div.appendChild(renameButton2);
+        renameButton2.addEventListener('click', () => {
+            let nameDiv = player1Div.querySelector('.name');
+            let newName = prompt('Enter your name:', `${nameDiv.textContent}`);
+            nameDiv.textContent = newName;   
+        });
+        
+    }
+
+
     function displayWinner() {
-        let winMessage = document.createElement('div');
+        const winMessage = document.createElement('div');
         winMessage.classList.toggle('win-message');
         postGame.appendChild(winMessage);
         if (game.checkForWinner() == playerX.symbol) {
@@ -70,7 +100,7 @@ const gameDisplay = (() => {
 
 
     function createRestartButton() {
-        let restartButton = document.createElement('button');
+        const restartButton = document.createElement('button');
             restartButton.type = 'button';
             restartButton.classList.toggle('restart');
             restartButton.textContent = 'Play Again?';
@@ -85,6 +115,7 @@ const gameDisplay = (() => {
 
     generateBoard();
     displayPlayers();
+    createRenameButtons();
     return {generateBoard, clearBoard, displayWinner, createRestartButton}
 })();
 
