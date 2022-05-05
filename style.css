@@ -3,8 +3,7 @@
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
-    background-color: gray;
-    border: 1px solid black;
+    background-color: rgb(241, 246, 252);
 }
 
 body {
@@ -13,18 +12,36 @@ body {
     align-items: center;
 }
 
+h1 {
+    padding: 24px;
+}
 
+button {
+    border-radius: 8px;
+    color: white;
+    background-color: rgb(100, 124, 202);
+}
+
+button:hover {
+    background-color: rgb(125, 154, 247);
+    cursor: pointer;
+}
+
+/* Player name & winner display */
 .players {
     display: flex;
-    width: 90vw;
+    width: 700px;
     justify-content: space-between;
+    font-size: 1.8rem;
 }
 
 .players .player1, .players .player2  {
     display: grid;
     grid: 2fr 1fr / 1fr 1fr;
     gap: 8px;
+    column-gap: 36px;
     padding: 8px;
+    font-weight: 500;
 }
 
 .player2 {
@@ -40,25 +57,26 @@ body {
 }
 
 
-
-
-
-
-
+/* Board grid */
 .game-board {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 24px;
-    padding: 48px;
+    gap: 8px;
+    margin: 48px;
     justify-items: center;
     align-items: center;
-    background-color: antiquewhite;
+    background-color: rgb(100, 124, 202);
 }
 
 .board-cell {
-    width: 40px;
-    height: 40px;
-    background-color: antiquewhite;
+    width: 80px;
+    height: 80px;
+    background-color: rgb(241, 246, 252);
     text-align: center;
-    font-size: 2rem;
+    font-size: 4rem;
+}
+
+.restart {
+    padding: 12px 48px 12px 48px;
+    font-size: 1.5rem;
 }
