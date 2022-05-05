@@ -5,7 +5,7 @@ const Player = (name, symbol) => {
 const playerX = Player('Player 1', 'X');
 const playerO = Player('Player 2', 'O');
 let turnTracker = 1;
-
+let multiplayer = true;
 
 const gameDisplay = (() => {
     let boardValues = ['', '', '', '', '', '', '', '', ''];
@@ -114,8 +114,8 @@ const gameDisplay = (() => {
             restartButton.addEventListener('click', () => {
                 gameDisplay.clearBoard();
                 cells = document.querySelectorAll('.board-cell');
-                game.playGame();
                 turnTracker = 1;
+                game.playGame();    
         });
     }
 
@@ -129,7 +129,6 @@ const gameDisplay = (() => {
 const game = (() => {
     let currentPlayer = playerX;
     let winner = false;
-
 
     function playGame() {
         gameDisplay.createRestartButton();
@@ -156,6 +155,9 @@ const game = (() => {
                 winner = true;
                 playGame();
             } 
+            if (!winner && !multiplayer) {
+                computerTurn();
+            }
         }
     }
 
@@ -196,6 +198,29 @@ const game = (() => {
         }
     }
 
+
+    function computerTurn () {
+            let computerCells = document.querySelectorAll('.board-cell');
+            let computerArray = Array.from(computerCells);
+            let randomCell = getRandomInt(0, 8);
+            if (computerArray[randomCell].textContent == '') {
+                computerArray[randomCell].textContent = playerO.symbol;
+                turnTracker = 1;
+            } else {
+                if (!checkForWinner()) {
+                    computerTurn();
+                }
+            }
+    }
+
+
+
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
     playGame();
     return {playGame, checkForWinner}
